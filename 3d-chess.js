@@ -593,6 +593,43 @@ function undoMove() {
 
 // Initialize the game when the page loads
 let game;
+
+function initializeGame() {
+    console.log('Checking libraries...');
+    console.log('THREE:', typeof THREE);
+    console.log('Chess:', typeof Chess);
+    console.log('OrbitControls:', typeof THREE !== 'undefined' ? typeof THREE.OrbitControls : 'THREE not loaded');
+    
+    // Check if required libraries are loaded
+    if (typeof THREE === 'undefined') {
+        console.error('Three.js is not loaded');
+        document.getElementById('loadingScreen').innerHTML = '<h2>Error: Three.js failed to load</h2>';
+        return;
+    }
+    
+    if (typeof Chess === 'undefined') {
+        console.error('Chess.js is not loaded');
+        document.getElementById('loadingScreen').innerHTML = '<h2>Error: Chess.js failed to load</h2>';
+        return;
+    }
+    
+    if (typeof THREE.OrbitControls === 'undefined') {
+        console.error('OrbitControls is not loaded');
+        document.getElementById('loadingScreen').innerHTML = '<h2>Error: OrbitControls failed to load</h2>';
+        return;
+    }
+    
+    console.log('All libraries loaded, initializing game...');
+    try {
+        game = new ChessGame3D();
+        console.log('Game initialized successfully');
+    } catch (error) {
+        console.error('Error initializing game:', error);
+        document.getElementById('loadingScreen').innerHTML = '<h2>Error initializing game: ' + error.message + '</h2>';
+    }
+}
+
+// Wait a bit for all scripts to load, then initialize
 window.addEventListener('load', () => {
-    game = new ChessGame3D();
+    setTimeout(initializeGame, 100);
 });
