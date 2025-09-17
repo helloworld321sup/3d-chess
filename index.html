@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3D Chess Game</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #1e3c72, #2a5298);
+            font-family: 'Arial', sans-serif;
+            overflow: hidden;
+            color: white;
+        }
+
+        #gameContainer {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+        }
+
+        #gameCanvas {
+            display: block;
+        }
+
+        #gameUI {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            z-index: 100;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 20px;
+            border-radius: 10px;
+            backdrop-filter: blur(10px);
+        }
+
+        #turnIndicator {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        #gameStatus {
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+
+        #capturedPieces {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .captured-section {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .captured-section h3 {
+            margin: 0;
+            font-size: 16px;
+        }
+
+        .captured-list {
+            display: flex;
+            gap: 5px;
+        }
+
+        .captured-piece {
+            width: 30px;
+            height: 30px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+        }
+
+        #controls {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            z-index: 100;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 15px;
+            border-radius: 10px;
+            backdrop-filter: blur(10px);
+        }
+
+        .control-button {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            margin: 5px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .control-button:hover {
+            background: #45a049;
+        }
+
+        #loadingScreen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            flex-direction: column;
+        }
+
+        .loading-spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid #333;
+            border-top: 5px solid #fff;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 20px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div id="gameContainer">
+        <canvas id="gameCanvas"></canvas>
+        
+        <div id="loadingScreen">
+            <div class="loading-spinner"></div>
+            <h2>Loading 3D Chess Game...</h2>
+        </div>
+
+        <div id="gameUI">
+            <div id="turnIndicator">White's Turn</div>
+            <div id="gameStatus">Game in Progress</div>
+            <div id="capturedPieces">
+                <div class="captured-section">
+                    <h3>White Captured:</h3>
+                    <div id="whiteCaptured" class="captured-list"></div>
+                </div>
+                <div class="captured-section">
+                    <h3>Black Captured:</h3>
+                    <div id="blackCaptured" class="captured-list"></div>
+                </div>
+            </div>
+        </div>
+
+        <div id="controls">
+            <button class="control-button" onclick="resetGame()">New Game</button>
+            <button class="control-button" onclick="toggleCamera()">Toggle View</button>
+            <button class="control-button" onclick="undoMove()">Undo Move</button>
+        </div>
+    </div>
+
+    <!-- Three.js CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+    
+    <!-- Chess.js for game logic -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/chess.js/1.0.0-beta.6/chess.min.js"></script>
+    
+    <script src="3d-chess.js"></script>
+</body>
+</html>
